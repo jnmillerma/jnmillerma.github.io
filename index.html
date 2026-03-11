@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jazzmyne Miller — Senior User Researcher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0B1120;
+      --navy-mid: #131C30;
+      --navy-light: #1E2D4A;
+      --blue: #4A8FD4;
+      --blue-light: #7AB3E0;
+      --blue-pale: #C8DFF2;
+      --gold: #C9A84C;
+      --white: #F4F7FB;
+      --mid: #7A8BA8;
+      --rule: rgba(74,143,212,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── STAR FIELD ── */
+    #starfield {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .star {
+      position: absolute; background: white; border-radius: 50%;
+      animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: var(--min, 0.1); transform: scale(1); }
+      to   { opacity: var(--max, 0.8); transform: scale(1.3); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 5rem;
+      background: rgba(11,17,32,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      animation: fadeDown 0.7s ease both;
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--blue-light);
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--mid); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blue-light); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(74,143,212,0.1) 0%, transparent 70%);
+      border-radius: 50%; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-illustration {
+      width: 160px; height: 160px;
+      margin-bottom: 2.5rem;
+      animation: float 6s ease-in-out infinite;
+      position: relative; z-index: 2;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-14px); }
+    }
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--blue-light);
+      margin-bottom: 1.2rem; position: relative; z-index: 2;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 700; line-height: 1; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 1.5rem;
+      position: relative; z-index: 2;
+      animation: fadeUp 0.8s 0.35s ease both;
+    }
+    .hero-name em { font-style: italic; color: var(--blue-light); }
+    .hero-headline {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      font-weight: 300; color: var(--mid);
+      line-height: 1.7; max-width: 52ch;
+      margin: 0 auto 2.5rem;
+      position: relative; z-index: 2;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+    .hero-headline strong { color: var(--blue-pale); font-weight: 500; }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 0.65rem;
+      background: transparent; border: 1px solid var(--blue);
+      color: var(--blue-light); padding: 0.85rem 2.2rem;
+      text-decoration: none; font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      transition: background 0.25s, color 0.25s, transform 0.2s;
+      position: relative; z-index: 2;
+      animation: fadeUp 0.8s 0.65s ease both;
+    }
+    .hero-cta:hover { background: var(--blue); color: var(--white); transform: translateY(-2px); }
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid);
+      animation: fadeIn 1.5s 1.2s ease both; z-index: 2;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--blue), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+    /* ── SECTION COMMONS ── */
+    section { position: relative; z-index: 1; padding: 6rem 5rem; }
+    section:nth-child(even) { background: var(--navy-mid); }
+    .section-eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;
+      letter-spacing: -0.02em; line-height: 1.1;
+      color: var(--white); margin-bottom: 3rem;
+    }
+    .section-title em { font-style: italic; color: var(--blue-light); }
+
+    /* ── ABOUT ── */
+    #about { background: var(--navy-light); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      gap: 5rem; align-items: center;
+    }
+    .about-photo-stack { position: relative; height: 480px; }
+    .about-photo {
+      position: absolute; border-radius: 2px;
+      object-fit: cover; border: 2px solid var(--rule);
+    }
+    .about-photo-1 { width: 75%; height: 85%; top: 0; left: 0; filter: grayscale(15%); z-index: 2; }
+    .about-photo-2 { width: 55%; height: 58%; bottom: 0; right: 0; z-index: 3; border-color: var(--blue); }
+    .about-photo-accent {
+      position: absolute; width: 70px; height: 70px;
+      border: 1px solid var(--blue); bottom: 12%; left: 62%;
+      z-index: 1; opacity: 0.35;
+    }
+    .about-text p {
+      font-size: 1rem; font-weight: 300; line-height: 1.85;
+      color: #A8B8CC; margin-bottom: 1.4rem;
+    }
+    .about-text p strong { color: var(--white); font-weight: 500; }
+    .about-stats {
+      display: flex; gap: 2.5rem; margin-top: 2.5rem;
+      padding-top: 2rem; border-top: 1px solid var(--rule);
+    }
+    .about-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem; font-weight: 700;
+      color: var(--blue-light); line-height: 1;
+    }
+    .about-stat-label {
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--mid); margin-top: 0.3rem;
+    }
+
+    /* ── PILLARS ── */
+    #pillars { background: var(--navy); }
+    .pillars-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px; background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .pillar-card {
+      background: var(--navy); padding: 3rem 2.5rem;
+      position: relative; overflow: hidden; transition: background 0.3s;
+    }
+    .pillar-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--blue); transform: scaleX(0);
+      transform-origin: left; transition: transform 0.4s ease;
+    }
+    .pillar-card:hover { background: var(--navy-light); }
+    .pillar-card:hover::before { transform: scaleX(1); }
+    .pillar-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 4rem;
+      font-weight: 700; font-style: italic;
+      color: rgba(74,143,212,0.1); line-height: 1; margin-bottom: 1rem;
+      transition: color 0.3s;
+    }
+    .pillar-card:hover .pillar-num { color: rgba(74,143,212,0.2); }
+    .pillar-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .pillar-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.55rem;
+      font-weight: 700; color: var(--white); margin-bottom: 1rem; line-height: 1.2;
+    }
+    .pillar-desc {
+      font-size: 0.875rem; font-weight: 300; color: var(--mid);
+      line-height: 1.75; margin-bottom: 1.5rem;
+    }
+    .pillar-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .pillar-tag {
+      font-family: 'DM Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);
+      border: 1px solid rgba(74,143,212,0.3); padding: 0.2rem 0.55rem; border-radius: 2px;
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--navy-mid); }
+    .skills-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+    .skill-group-title {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue);
+      margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule);
+    }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .skill-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.875rem; font-weight: 300; color: #A8B8CC;
+    }
+    .skill-dot { width: 4px; height: 4px; background: var(--blue); border-radius: 50%; flex-shrink: 0; opacity: 0.7; }
+
+    /* ── WORK ── */
+    #work { background: var(--navy-light); }
+    .work-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.5px; background: var(--rule); border: 1px solid var(--rule);
+    }
+    .work-card {
+      background: var(--navy); padding: 2.5rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: background 0.25s; cursor: pointer; position: relative; overflow: hidden;
+    }
+    .work-card::after {
+      content: '→'; position: absolute; bottom: 2rem; right: 2rem;
+      font-size: 1.2rem; color: var(--blue);
+      opacity: 0; transform: translateX(-8px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .work-card:hover { background: var(--navy-mid); }
+    .work-card:hover::after { opacity: 1; transform: translateX(0); }
+    .work-card.featured {
+      grid-column: span 2; display: grid;
+      grid-template-columns: 1fr 1fr; gap: 3rem;
+      align-items: center; padding: 3.5rem;
+    }
+    .work-tag {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue);
+      border: 1px solid rgba(74,143,212,0.3); padding: 0.2rem 0.6rem; width: fit-content;
+    }
+    .work-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+      font-weight: 700; color: var(--white); line-height: 1.2;
+    }
+    .work-card.featured .work-title { font-size: 2rem; }
+    .work-desc { font-size: 0.875rem; font-weight: 300; color: var(--mid); line-height: 1.75; }
+    .work-meta {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--rule);
+    }
+    .work-meta-item {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(120,140,170,0.55);
+    }
+    .work-visual {
+      background: var(--navy-light); height: 100%; min-height: 220px;
+      border-radius: 2px; display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; border: 1px solid var(--rule); position: relative; overflow: hidden;
+    }
+    .work-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 40% 40%, rgba(74,143,212,0.07), transparent 65%);
+    }
+    .work-right { display: flex; flex-direction: column; gap: 1rem; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--navy); }
+    .contact-inner { max-width: 640px; margin: 0 auto; text-align: center; }
+    .contact-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 600;
+      font-style: italic; color: var(--white); margin-bottom: 1.2rem; line-height: 1.2;
+    }
+    .contact-sub {
+      font-size: 0.95rem; font-weight: 300; color: var(--mid);
+      line-height: 1.75; margin-bottom: 3rem;
+    }
+    .contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .contact-link {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      border: 1px solid var(--rule); color: var(--blue-light);
+      padding: 0.9rem 2rem; text-decoration: none;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .contact-link:hover { border-color: var(--blue); background: rgba(74,143,212,0.08); transform: translateY(-2px); }
+    .contact-fun {
+      margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--rule);
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.15em; color: var(--mid); text-transform: uppercase;
+    }
+    .contact-fun span { color: var(--blue); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy); border-top: 1px solid var(--rule);
+      text-align: center; padding: 2rem;
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(120,140,170,0.35); position: relative; z-index: 1;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.75s ease,transform 0.75s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:960px){
+      nav{padding:1rem 1.5rem}
+      .nav-links{gap:1.5rem}
+      section{padding:4rem 1.5rem}
+      .about-grid{grid-template-columns:1fr;gap:3rem}
+      .about-photo-stack{height:300px}
+      .pillars-grid{grid-template-columns:1fr}
+      .skills-layout{grid-template-columns:1fr 1fr;gap:2rem}
+      .work-grid{grid-template-columns:1fr}
+      .work-card.featured{grid-column:span 1;grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<div id="starfield"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Jazzmyne Miller</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#pillars">Expertise</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+
+  <svg class="hero-illustration" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="80" cy="80" r="60" fill="rgba(74,143,212,0.05)"/>
+    <!-- Suit body -->
+    <ellipse cx="80" cy="100" rx="34" ry="38" fill="#1E2D4A" stroke="#4A8FD4" stroke-width="1.5"/>
+    <!-- Chest panel -->
+    <rect x="67" y="90" width="26" height="18" rx="3" fill="#131C30" stroke="#4A8FD4" stroke-width="1"/>
+    <circle cx="74" cy="99" r="3" fill="#4A8FD4" opacity="0.9"/>
+    <circle cx="86" cy="99" r="3" fill="#C9A84C" opacity="0.9"/>
+    <!-- Helmet -->
+    <circle cx="80" cy="60" r="26" fill="#1E2D4A" stroke="#4A8FD4" stroke-width="1.5"/>
+    <!-- Visor -->
+    <ellipse cx="80" cy="60" rx="17" ry="15" fill="#0B1120" stroke="#4A8FD4" stroke-width="1"/>
+    <!-- Visor reflection -->
+    <ellipse cx="75" cy="55" rx="4.5" ry="3.5" fill="rgba(74,143,212,0.22)" transform="rotate(-15 75 55)"/>
+    <!-- Arms -->
+    <path d="M46 88 Q33 100 37 114" stroke="#1E2D4A" stroke-width="13" stroke-linecap="round" fill="none"/>
+    <path d="M46 88 Q33 100 37 114" stroke="#4A8FD4" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+    <path d="M114 88 Q128 75 124 62" stroke="#1E2D4A" stroke-width="13" stroke-linecap="round" fill="none"/>
+    <path d="M114 88 Q128 75 124 62" stroke="#4A8FD4" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+    <!-- Waving hand -->
+    <circle cx="124" cy="59" r="7" fill="#1E2D4A" stroke="#4A8FD4" stroke-width="1"/>
+    <!-- Legs -->
+    <path d="M65 135 Q61 147 58 154" stroke="#1E2D4A" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <path d="M65 135 Q61 147 58 154" stroke="#4A8FD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+    <path d="M95 135 Q99 147 102 154" stroke="#1E2D4A" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <path d="M95 135 Q99 147 102 154" stroke="#4A8FD4" stroke-width="1" stroke-linecap="round" fill="none"/>
+    <ellipse cx="58" cy="156" rx="9" ry="4" fill="#1E2D4A" stroke="#4A8FD4" stroke-width="1"/>
+    <ellipse cx="102" cy="156" rx="9" ry="4" fill="#1E2D4A" stroke="#4A8FD4" stroke-width="1"/>
+    <!-- Shoulder rings -->
+    <circle cx="46" cy="86" r="7" fill="#131C30" stroke="#4A8FD4" stroke-width="1.2"/>
+    <circle cx="114" cy="86" r="7" fill="#131C30" stroke="#4A8FD4" stroke-width="1.2"/>
+    <!-- Stars -->
+    <circle cx="18" cy="35" r="1.5" fill="#C9A84C" opacity="0.9"/>
+    <circle cx="140" cy="25" r="1" fill="white" opacity="0.7"/>
+    <circle cx="148" cy="110" r="1.5" fill="#7AB3E0" opacity="0.8"/>
+    <circle cx="12" cy="118" r="1" fill="white" opacity="0.6"/>
+    <circle cx="30" cy="145" r="1.5" fill="#C9A84C" opacity="0.5"/>
+    <!-- Clipboard -->
+    <rect x="22" y="92" width="16" height="20" rx="2" fill="#131C30" stroke="#4A8FD4" stroke-width="0.8" opacity="0.8"/>
+    <line x1="25" y1="99" x2="35" y2="99" stroke="#4A8FD4" stroke-width="0.8" opacity="0.6"/>
+    <line x1="25" y1="103" x2="33" y2="103" stroke="#4A8FD4" stroke-width="0.8" opacity="0.6"/>
+    <line x1="25" y1="107" x2="35" y2="107" stroke="#4A8FD4" stroke-width="0.8" opacity="0.6"/>
+  </svg>
+
+  <div class="hero-label">Senior User Researcher · Seattle, WA</div>
+  <h1 class="hero-name">Jazzmyne <em>Miller</em></h1>
+  <p class="hero-headline">
+    From <strong>consumer insights</strong> to <strong>user experience</strong> —<br/>research that drives decisions.
+  </p>
+  <a href="#work" class="hero-cta">
+    View My Work
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <div class="section-eyebrow">01 — About</div>
+    <h2 class="section-title">The <em>Researcher</em> Behind the Data</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-photo-stack">
+      <img class="about-photo about-photo-1" src="/mnt/user-data/uploads/JM10.jpg" alt="Jazzmyne Miller — professional headshot"/>
+      <img class="about-photo about-photo-2" src="/mnt/user-data/uploads/1773118711418_image.png" alt="Jazzmyne Miller"/>
+      <div class="about-photo-accent"></div>
+    </div>
+    <div class="about-text">
+      <p>I'm <strong>Jazzmyne Miller</strong> — a Senior User Researcher with <strong>5+ years in UX research</strong> and over <strong>10 years in survey design and quantitative analysis</strong>. I've built my career at the intersection of rigorous statistical thinking and deep human understanding.</p>
+      <p>My path from <strong>market research at Mintel</strong> to <strong>UX research at Meta and PeopleFun</strong> gave me something rare: the ability to ask the right qualitative questions <em>and</em> run the advanced statistics to validate what the data means. I don't just surface insights — I prove them.</p>
+      <p>Based in <strong>Seattle, WA</strong>. Currently open to senior IC and research leadership opportunities where research has a real seat at the table.</p>
+      <div class="about-stats">
+        <div>
+          <div class="about-stat-num">5+</div>
+          <div class="about-stat-label">Years in UX Research</div>
+        </div>
+        <div>
+          <div class="about-stat-num">10+</div>
+          <div class="about-stat-label">Years Quant Analysis</div>
+        </div>
+        <div>
+          <div class="about-stat-num">200k+</div>
+          <div class="about-stat-label">Survey Responses Analyzed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="pillars">
+  <div class="reveal">
+    <div class="section-eyebrow">02 — Expertise</div>
+    <h2 class="section-title">Three <em>Pillars</em> of Practice</h2>
+  </div>
+  <div class="pillars-grid reveal">
+    <div class="pillar-card">
+      <div class="pillar-num">01</div>
+      <div class="pillar-icon">🔭</div>
+      <div class="pillar-title">User Research</div>
+      <p class="pillar-desc">End-to-end research across the full product lifecycle — from generative discovery to evaluative testing post-launch. I partner with product, design, and engineering to make sure insights actually land.</p>
+      <div class="pillar-tags">
+        <span class="pillar-tag">In-Depth Interviews</span>
+        <span class="pillar-tag">Usability Testing</span>
+        <span class="pillar-tag">Concept Testing</span>
+        <span class="pillar-tag">Playtesting</span>
+        <span class="pillar-tag">Diary Studies</span>
+        <span class="pillar-tag">Heuristic Evaluation</span>
+      </div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">02</div>
+      <div class="pillar-icon">📊</div>
+      <div class="pillar-title">Survey Design & Quant Analysis</div>
+      <p class="pillar-desc">10+ years designing surveys and running advanced statistical analyses. I bring market research rigor to UX — with the statistical depth to validate findings at scale and communicate them with precision.</p>
+      <div class="pillar-tags">
+        <span class="pillar-tag">Cluster Analysis</span>
+        <span class="pillar-tag">Conjoint / MaxDiff</span>
+        <span class="pillar-tag">TURF Analysis</span>
+        <span class="pillar-tag">Regression</span>
+        <span class="pillar-tag">Key Driver Analysis</span>
+        <span class="pillar-tag">Van Westendorp</span>
+      </div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">03</div>
+      <div class="pillar-icon">🛰️</div>
+      <div class="pillar-title">Research Operations</div>
+      <p class="pillar-desc">Research doesn't run itself. I design the systems and programs that make research sustainable — from tracking studies and rolling research programs to fieldwork strategy and cross-functional workflows.</p>
+      <div class="pillar-tags">
+        <span class="pillar-tag">Tracking Studies</span>
+        <span class="pillar-tag">Rolling Research Programs</span>
+        <span class="pillar-tag">Fieldwork Strategy</span>
+        <span class="pillar-tag">Competitive Analysis</span>
+        <span class="pillar-tag">Persona Development</span>
+        <span class="pillar-tag">Journey Mapping</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-eyebrow">03 — Skills & Tools</div>
+    <h2 class="section-title">The <em>Toolkit</em></h2>
+  </div>
+  <div class="skills-layout reveal">
+    <div>
+      <div class="skill-group-title">Research Methods</div>
+      <ul class="skill-list">
+        <li class="skill-item"><span class="skill-dot"></span>Surveys & Tracking Studies</li>
+        <li class="skill-item"><span class="skill-dot"></span>In-Depth Interviews</li>
+        <li class="skill-item"><span class="skill-dot"></span>Focus Groups</li>
+        <li class="skill-item"><span class="skill-dot"></span>Diary Studies</li>
+        <li class="skill-item"><span class="skill-dot"></span>Moderated & Unmoderated Usability Testing</li>
+        <li class="skill-item"><span class="skill-dot"></span>Prototype & Concept Testing</li>
+        <li class="skill-item"><span class="skill-dot"></span>Heuristic Evaluation</li>
+        <li class="skill-item"><span class="skill-dot"></span>Competitive Analysis</li>
+        <li class="skill-item"><span class="skill-dot"></span>Persona Development</li>
+        <li class="skill-item"><span class="skill-dot"></span>Journey Mapping</li>
+      </ul>
+    </div>
+    <div>
+      <div class="skill-group-title">Quantitative & Analytical</div>
+      <ul class="skill-list">
+        <li class="skill-item"><span class="skill-dot"></span>Cluster Analysis</li>
+        <li class="skill-item"><span class="skill-dot"></span>Regression Analysis</li>
+        <li class="skill-item"><span class="skill-dot"></span>Key Driver Analysis</li>
+        <li class="skill-item"><span class="skill-dot"></span>Pricing Research (Van Westendorp)</li>
+        <li class="skill-item"><span class="skill-dot"></span>Conjoint / MaxDiff</li>
+        <li class="skill-item"><span class="skill-dot"></span>TURF Analysis</li>
+        <li class="skill-item"><span class="skill-dot"></span>Time-Series Forecasting</li>
+        <li class="skill-item"><span class="skill-dot"></span>Survey Weighting</li>
+      </ul>
+    </div>
+    <div>
+      <div class="skill-group-title">Tools & Platforms</div>
+      <ul class="skill-list">
+        <li class="skill-item"><span class="skill-dot"></span>SPSS · R · Python · JASP</li>
+        <li class="skill-item"><span class="skill-dot"></span>Qualtrics · Alchemer</li>
+        <li class="skill-item"><span class="skill-dot"></span>Lookback · PlaytestCloud · dscout</li>
+        <li class="skill-item"><span class="skill-dot"></span>Figma · Mural</li>
+        <li class="skill-item"><span class="skill-dot"></span>Confluence · Jira</li>
+        <li class="skill-item"><span class="skill-dot"></span>Excel</li>
+        <li class="skill-item"><span class="skill-dot"></span>CAPM · PMI (In Progress)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="work">
+  <div class="reveal">
+    <div class="section-eyebrow">04 — Case Studies</div>
+    <h2 class="section-title">Selected <em>Work</em></h2>
+  </div>
+  <div class="work-grid reveal">
+    <div class="work-card featured">
+      <div class="work-visual">🎮</div>
+      <div class="work-right">
+        <span class="work-tag">Featured · Mobile Gaming · PeopleFun</span>
+        <h3 class="work-title">Player Persona Segmentation for Wordscapes</h3>
+        <p class="work-desc">Created validated player persona segments from a 200,000+ response survey using cluster analysis, giving product and design teams a clear, statistically-grounded framework for thinking about different player types across new and existing titles.</p>
+        <div class="work-meta">
+          <span class="work-meta-item">Cluster Analysis</span>
+          <span class="work-meta-item">200k+ Survey</span>
+          <span class="work-meta-item">PeopleFun</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-card">
+      <span class="work-tag">Video Calling · Meta</span>
+      <h3 class="work-title">5-Market Competitive Tracking Study</h3>
+      <p class="work-desc">Designed and executed a multi-market tracking study to map the competitive landscape of audio and video calling for Messenger and Facebook — informing product strategy across five global markets.</p>
+      <div class="work-meta">
+        <span class="work-meta-item">Tracking Study</span>
+        <span class="work-meta-item">5 Markets</span>
+        <span class="work-meta-item">Meta</span>
+      </div>
+    </div>
+    <div class="work-card">
+      <span class="work-tag">Research Ops · Meta</span>
+      <h3 class="work-title">Rolling Research Program Design</h3>
+      <p class="work-desc">Co-created and managed a Rolling Research program to conduct rapid usability studies and gather continuous user feedback on proposed design concepts — reducing time from question to insight.</p>
+      <div class="work-meta">
+        <span class="work-meta-item">ReOps</span>
+        <span class="work-meta-item">Usability Testing</span>
+        <span class="work-meta-item">Meta</span>
+      </div>
+    </div>
+    <div class="work-card">
+      <span class="work-tag">Consumer Segmentation · Mintel</span>
+      <h3 class="work-title">Proprietary Psychographic Segmentation</h3>
+      <p class="work-desc">Designed and refined proprietary consumer segmentations using Factor, Cluster, and Discriminant Analysis for Mintel's Multicultural syndicated reports — enabling clients to target key consumer groups with precision.</p>
+      <div class="work-meta">
+        <span class="work-meta-item">Factor + Cluster + Discriminant</span>
+        <span class="work-meta-item">Mintel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner reveal">
+    <div class="section-eyebrow">05 — Contact</div>
+    <p class="contact-headline">"Let's talk about what<br/>your users are really telling you."</p>
+    <p class="contact-sub">Open to senior IC and research leadership roles where insight drives real decisions. Let's connect.</p>
+    <div class="contact-links">
+      <a href="mailto:jnmillerma@gmail.com" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1 4l6 4 6-4" stroke="currentColor" stroke-width="1.2"/></svg>
+        Email Me
+      </a>
+      <a href="https://linkedin.com/in/jnmillerma" target="_blank" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6v4M4 4.5v.01M7 10V8a1 1 0 012 0v2M7 6v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        LinkedIn
+      </a>
+    </div>
+    <div class="contact-fun">
+      Based in Seattle, WA &nbsp;·&nbsp; <span>🖖 Live long and research</span>
+    </div>
+  </div>
+</section>
+
+<footer>© 2025 Jazzmyne Miller · Senior User Researcher · Built with intention</footer>
+
+<script>
+  // Starfield
+  const sf = document.getElementById('starfield');
+  for (let i = 0; i < 180; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.2 + 0.4;
+    s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--min:${(Math.random()*0.2+0.04).toFixed(2)};--max:${(Math.random()*0.55+0.2).toFixed(2)};--d:${(Math.random()*4+2).toFixed(1)}s;animation-delay:${(Math.random()*6).toFixed(1)}s`;
+    sf.appendChild(s);
+  }
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
